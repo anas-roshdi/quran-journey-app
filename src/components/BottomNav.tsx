@@ -32,12 +32,12 @@ export default function BottomNav({ role, activeTab, navigation }: BottomNavProp
                         <Text className={`text-[10px] mt-1 ${getTextColor('classes')}`} style={{ fontFamily: getFontFamily('classes') }}>حلقاتي</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => navigation.navigate('QuranReader')} className="items-center justify-center flex-1 -mt-5">
+                    {/* <TouchableOpacity onPress={() => navigation.navigate('QuranReader')} className="items-center justify-center flex-1 -mt-5">
                         <View className={`w-14 h-14 rounded-full items-center justify-center shadow-lg border-4 border-border ${activeTab === 'quran' ? 'bg-emerald-600 shadow-emerald-400' : 'bg-primary shadow-emerald-300'}`}>
                             <Feather name="book-open" size={24} color="white" />
                         </View>
                         <Text className="text-[11px] text-primary mt-1" style={{ fontFamily: 'Tajawal-Bold' }}>المصحف</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
                     <TouchableOpacity onPress={() => navigation.navigate('Leaderboard')} className="items-center justify-center flex-1">
                         <Feather name="award" size={22} color={getIconColor('leaderboard')} />
