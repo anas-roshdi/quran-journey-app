@@ -7,6 +7,8 @@ import { useFonts, Tajawal_400Regular, Tajawal_500Medium, Tajawal_700Bold } from
 import LoginScreen from './src/screens/auth/LoginScreen';
 import ForgotPasswordScreen from './src/screens/auth/ForgotPasswordScreen';
 import RegisterScreen from './src/screens/auth/RegisterScreen';
+import ResetPasswordScreen from './src/screens/auth/ResetPasswordScreen';
+import OtpVerificationModal from './src/screens/auth/OtpVerificationModal';
 
 // Shared Screens
 import ProfileScreen from './src/screens/shared/ProfileScreen';
@@ -57,6 +59,8 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen name="OtpVerificationModal" component={OtpVerificationModal} />
+        <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
         <Stack.Screen name="Dashboard" component={DashboardScreen} />
         <Stack.Screen name="QuranReader" component={QuranReaderScreen} />
         <Stack.Screen name="TeacherDashboard" component={TeacherDashboardScreen} />
