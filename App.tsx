@@ -5,6 +5,8 @@ import { useFonts, Tajawal_400Regular, Tajawal_500Medium, Tajawal_700Bold } from
 
 // Auth Screens
 import LoginScreen from './src/screens/auth/LoginScreen';
+import ForgotPasswordScreen from './src/screens/auth/ForgotPasswordScreen';
+import RegisterScreen from './src/screens/auth/RegisterScreen';
 
 // Shared Screens
 import ProfileScreen from './src/screens/shared/ProfileScreen';
@@ -53,6 +55,8 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+        <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Dashboard" component={DashboardScreen} />
         <Stack.Screen name="QuranReader" component={QuranReaderScreen} />
         <Stack.Screen name="TeacherDashboard" component={TeacherDashboardScreen} />
