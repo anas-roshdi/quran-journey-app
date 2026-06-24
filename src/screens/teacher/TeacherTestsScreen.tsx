@@ -103,9 +103,10 @@ const TestSessionCard = ({ test, isArchive, navigation }: { test: any, isArchive
             {/* Action & Stats Row */}
             <View className="flex-row items-center justify-between">
 
-                {/* Action Button (تم تقليل الحواف الجانبية وإضافة خصائص لمنع انكسار النص) */}
+                {/* Action Button */}
                 <TouchableOpacity
                     activeOpacity={0.8}
+                    onPress={() => !isArchive && navigation.navigate('ManageTestSession', { test })}
                     className={`h-11 px-4 rounded-xl flex-row-reverse items-center justify-center shadow-sm ${isArchive ? 'bg-white border border-gray-200' : 'bg-primary'
                         }`}
                 >

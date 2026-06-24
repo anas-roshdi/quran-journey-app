@@ -35,6 +35,7 @@ import TeacherClassesScreen from './src/screens/teacher/TeacherClassesScreen';
 import JoinRequestsScreen from './src/screens/teacher/JoinRequestsScreen';
 import TeacherTestsScreen from './src/screens/teacher/TeacherTestsScreen';
 import CreateTestSessionScreen from './src/screens/teacher/CreateTestSessionScreen';
+import ManageTestSessionScreen from './src/screens/teacher/ManageTestSessionScreen';
 
 
 // Parent Screens
@@ -84,6 +85,7 @@ export default function App() {
         <Stack.Screen name="BookTest" component={BookTestScreen} />
         <Stack.Screen name="TeacherTests" component={TeacherTestsScreen} />
         <Stack.Screen name="CreateTestSession" component={CreateTestSessionScreen} />
+        <Stack.Screen name="ManageTestSession" component={ManageTestSessionScreen} />
 
 
 

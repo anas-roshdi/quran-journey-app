@@ -1,16 +1,9 @@
 import React, { useState, useRef } from "react";
 import { View, Text, ScrollView, TouchableOpacity, TextInput, Platform, StatusBar, Modal, TouchableWithoutFeedback, KeyboardAvoidingView } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import DateTimePicker from '@react-native-community/datetimepicker'; // Added native picker
 
 // --- Mock Data for Pickers ---
-const availableDates = [
-    "اليوم (30 مايو)", "غداً (31 مايو)", "الاثنين (1 يونيو)", "الثلاثاء (2 يونيو)", "الأربعاء (3 يونيو)", "الخميس (4 يونيو)"
-];
-
-const availableTimes = [
-    "03:30 عصراً", "04:00 عصراً", "04:30 عصراً", "05:00 عصراً", "05:30 عصراً", "06:00 مساءً", "06:30 مساءً", "07:00 مساءً"
-];
-
 const teacherClasses = [
     { id: 'asr', name: 'حلقة العصر' },
     { id: 'maghrib', name: 'حلقة المغرب' }
@@ -26,11 +19,10 @@ export default function CreateTestSessionScreen({ navigation }: any) {
     const [visibility, setVisibility] = useState<'private' | 'public'>('private');
     const [selectedClasses, setSelectedClasses] = useState<string[]>(['asr']);
 
-    // --- Date & Time States ---
-    const [testDate, setDate] = useState(availableDates[0]);
-    const [testTime, setTime] = useState(availableTimes[2]);
-    const [isDateModalVisible, setIsDateModalVisible] = useState(false);
-    const [isTimeModalVisible, setIsTimeModalVisible] = useState(false);
+    // --- Date & Time Native Picker States ---
+    const [testDateTime, setTestDateTime] = useState(new Date());
+    const [pickerMode, setPickerMode] = useState<'date' | 'time'>('date');
+    const [showPicker, setShowPicker] = useState(false);
 
     // --- Range Slider States (Min/Max Ajzaa) ---
     const [minAmount, setMinAmount] = useState<number>(1);
@@ -82,14 +74,25 @@ export default function CreateTestSessionScreen({ navigation }: any) {
     const minPercent = ((minAmount - 1) / 29) * 100;
     const maxPercent = ((maxAmount - 1) / 29) * 100;
 
+    // --- Handle Date/Time Change ---
+    const handleDateTimeChange = (event: any, selectedDate?: Date) => {
+        if (Platform.OS === 'android') {
+            setShowPicker(false);
+        }
+        if (selectedDate) {
+            setTestDateTime(selectedDate);
+        }
+    };
+
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="flex-1 bg-background">
             <View style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 40 }} className="flex-1">
 
                 {/* --- Header --- */}
                 <View className="h-16 bg-card border-b border-border justify-center items-center z-10 relative w-full">
-                    <View className="absolute left-0 right-0 items-center justify-center pointer-events-none z-10">
-                        <Text className="text-lg text-foreground" style={{ fontFamily: 'Tajawal-Bold' }}>إنشاء جلسة اختبار</Text>
+                    {/* Fixed title wrap by adding left-12 right-12 and numberOfLines={1} */}
+                    <View className="absolute left-12 right-12 items-center justify-center pointer-events-none z-10">
+                        <Text numberOfLines={1} adjustsFontSizeToFit className="text-lg text-foreground text-center" style={{ fontFamily: 'Tajawal-Bold' }}>إنشاء جلسة اختبار</Text>
                     </View>
                     <TouchableOpacity onPress={() => navigation.goBack()} className="absolute right-5 w-10 h-10 bg-background rounded-full border border-border items-center justify-center active:opacity-70 z-20">
                         <Feather name="chevron-right" size={24} color="#0f172a" />
@@ -153,7 +156,6 @@ export default function CreateTestSessionScreen({ navigation }: any) {
                             </TouchableOpacity>
                         </View>
 
-                        {/* الكشف التدريجي: تم إضافة self-start و flex-shrink-0 لحل مشكلة انكسار النص */}
                         {visibility === 'private' && (
                             <View className="mt-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
                                 <Text className="text-xs text-muted mb-3 text-right" style={{ fontFamily: 'Tajawal-Medium' }}>اختر حلقة أو أكثر:</Text>
@@ -203,25 +205,29 @@ export default function CreateTestSessionScreen({ navigation }: any) {
                         </View>
                     </View>
 
-                    {/* 5. Date & Time Selection */}
+                    {/* 5. Date & Time Selection using Native Picker */}
                     <View className="px-5 mb-8 flex-row-reverse gap-3">
-                        <TouchableOpacity activeOpacity={0.7} onPress={() => setIsDateModalVisible(true)} className="flex-1">
+                        <TouchableOpacity activeOpacity={0.7} onPress={() => { setPickerMode('date'); setShowPicker(true); }} className="flex-1">
                             <Text className="text-sm text-foreground mb-3 text-right" style={{ fontFamily: 'Tajawal-Bold' }}>التاريخ</Text>
                             <View className="flex-row-reverse items-center justify-between bg-white border border-gray-200 rounded-xl px-4 h-14 shadow-sm">
                                 <View className="flex-row-reverse items-center">
                                     <Feather name="calendar" size={18} color="#10b981" />
-                                    <Text className="text-sm text-slate-700 mr-2" style={{ fontFamily: 'Tajawal-Medium', includeFontPadding: false, marginTop: 2 }}>{testDate}</Text>
+                                    <Text className="text-sm text-slate-700 mr-2" style={{ fontFamily: 'Tajawal-Medium', includeFontPadding: false, marginTop: 2 }}>
+                                        {testDateTime.toLocaleDateString('ar-SA', { month: 'short', day: 'numeric' })}
+                                    </Text>
                                 </View>
                                 <Feather name="chevron-down" size={16} color="#9ca3af" />
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity activeOpacity={0.7} onPress={() => setIsTimeModalVisible(true)} className="flex-1">
+                        <TouchableOpacity activeOpacity={0.7} onPress={() => { setPickerMode('time'); setShowPicker(true); }} className="flex-1">
                             <Text className="text-sm text-foreground mb-3 text-right" style={{ fontFamily: 'Tajawal-Bold' }}>الوقت</Text>
                             <View className="flex-row-reverse items-center justify-between bg-white border border-gray-200 rounded-xl px-4 h-14 shadow-sm">
                                 <View className="flex-row-reverse items-center">
                                     <Feather name="clock" size={18} color="#f97316" />
-                                    <Text className="text-sm text-slate-700 mr-2" style={{ fontFamily: 'Tajawal-Medium', includeFontPadding: false, marginTop: 2 }}>{testTime}</Text>
+                                    <Text className="text-sm text-slate-700 mr-2" style={{ fontFamily: 'Tajawal-Medium', includeFontPadding: false, marginTop: 2 }}>
+                                        {testDateTime.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit', hour12: true })}
+                                    </Text>
                                 </View>
                                 <Feather name="chevron-down" size={16} color="#9ca3af" />
                             </View>
@@ -255,64 +261,17 @@ export default function CreateTestSessionScreen({ navigation }: any) {
 
                 </ScrollView>
 
-                {/* --- Custom Date Picker Modal --- */}
-                <Modal animationType="fade" transparent={true} visible={isDateModalVisible} onRequestClose={() => setIsDateModalVisible(false)}>
-                    <TouchableOpacity activeOpacity={1} className="flex-1 justify-center items-center px-5 bg-black/40" onPress={() => setIsDateModalVisible(false)}>
-                        <TouchableWithoutFeedback>
-                            <View className="bg-card w-full rounded-3xl p-6 shadow-2xl max-h-[70%]">
-                                <View className="flex-row-reverse items-center justify-between mb-4">
-                                    <Text className="text-xl text-foreground" style={{ fontFamily: 'Tajawal-Bold' }}>اختر التاريخ</Text>
-                                    <TouchableOpacity onPress={() => setIsDateModalVisible(false)} className="bg-gray-50 p-2 rounded-full">
-                                        <Feather name="x" size={20} color="#64748b" />
-                                    </TouchableOpacity>
-                                </View>
-                                <ScrollView showsVerticalScrollIndicator={false} className="w-full">
-                                    {availableDates.map((date, idx) => (
-                                        <TouchableOpacity
-                                            key={idx}
-                                            activeOpacity={0.7}
-                                            onPress={() => { setDate(date); setIsDateModalVisible(false); }}
-                                            className={`w-full py-4 px-4 rounded-xl mb-2 flex-row-reverse items-center justify-between border ${testDate === date ? 'bg-primary-light border-primary' : 'bg-white border-gray-100'}`}
-                                        >
-                                            <Text className={`text-base ${testDate === date ? 'text-primary' : 'text-foreground'}`} style={{ fontFamily: 'Tajawal-Medium', includeFontPadding: false, marginTop: 2 }}>{date}</Text>
-                                            {testDate === date && <Feather name="check-circle" size={18} color="#10b981" />}
-                                        </TouchableOpacity>
-                                    ))}
-                                </ScrollView>
-                            </View>
-                        </TouchableWithoutFeedback>
-                    </TouchableOpacity>
-                </Modal>
-
-                {/* --- Custom Time Picker Modal --- */}
-                <Modal animationType="fade" transparent={true} visible={isTimeModalVisible} onRequestClose={() => setIsTimeModalVisible(false)}>
-                    <TouchableOpacity activeOpacity={1} className="flex-1 justify-center items-center px-5 bg-black/40" onPress={() => setIsTimeModalVisible(false)}>
-                        <TouchableWithoutFeedback>
-                            <View className="bg-card w-full rounded-3xl p-6 shadow-2xl max-h-[70%]">
-                                <View className="flex-row-reverse items-center justify-between mb-4">
-                                    <Text className="text-xl text-foreground" style={{ fontFamily: 'Tajawal-Bold' }}>اختر الوقت</Text>
-                                    <TouchableOpacity onPress={() => setIsTimeModalVisible(false)} className="bg-gray-50 p-2 rounded-full">
-                                        <Feather name="x" size={20} color="#64748b" />
-                                    </TouchableOpacity>
-                                </View>
-                                <ScrollView showsVerticalScrollIndicator={false} className="w-full">
-                                    <View className="flex-row-reverse flex-wrap justify-between">
-                                        {availableTimes.map((time, idx) => (
-                                            <TouchableOpacity
-                                                key={idx}
-                                                activeOpacity={0.7}
-                                                onPress={() => { setTime(time); setIsTimeModalVisible(false); }}
-                                                className={`w-[48%] py-4 rounded-xl mb-3 items-center justify-center border ${testTime === time ? 'bg-primary-light border-primary' : 'bg-white border-gray-100'}`}
-                                            >
-                                                <Text className={`text-sm ${testTime === time ? 'text-primary' : 'text-foreground'}`} style={{ fontFamily: 'Tajawal-Bold', includeFontPadding: false, marginTop: 2 }}>{time}</Text>
-                                            </TouchableOpacity>
-                                        ))}
-                                    </View>
-                                </ScrollView>
-                            </View>
-                        </TouchableWithoutFeedback>
-                    </TouchableOpacity>
-                </Modal>
+                {/* --- Native DateTimePicker Component --- */}
+                {showPicker && (
+                    <DateTimePicker
+                        value={testDateTime}
+                        mode={pickerMode}
+                        is24Hour={false}
+                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                        onChange={handleDateTimeChange}
+                        accentColor="#10b981" // تطبيق اللون الأخضر هنا
+                    />
+                )}
 
                 {/* --- Success Modal --- */}
                 <Modal animationType="fade" transparent={true} visible={isSuccessVisible}>

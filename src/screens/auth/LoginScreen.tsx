@@ -31,9 +31,12 @@ export default function LoginScreen({ navigation }: any) {
     // Complete navigation after OTP success
     const handleOtpVerify = (code: string) => {
         setIsOtpModalVisible(false);
-        if (pendingRole === 'teacher') navigation.replace('TeacherDashboard');
-        else if (pendingRole === 'parent') navigation.replace('ParentDashboard');
-        else navigation.replace('Dashboard');
+        // تم إضافة تأخير زمني بسيط لضمان إغلاق نافذة OTP قبل الانتقال
+        setTimeout(() => {
+            if (pendingRole === 'teacher') navigation.replace('TeacherDashboard');
+            else if (pendingRole === 'parent') navigation.replace('ParentDashboard');
+            else navigation.replace('Dashboard');
+        }, 300);
     };
 
     return (
@@ -42,7 +45,12 @@ export default function LoginScreen({ navigation }: any) {
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 className="flex-1"
             >
-                <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', paddingHorizontal: 24, paddingVertical: 40 }} showsVerticalScrollIndicator={false}>
+                {/* تم إضافة keyboardShouldPersistTaps="handled" لحل مشكلة النقرة الضائعة */}
+                <ScrollView
+                    contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', paddingHorizontal: 24, paddingVertical: 40 }}
+                    showsVerticalScrollIndicator={false}
+                    keyboardShouldPersistTaps="handled"
+                >
 
                     {/* Top Section */}
                     <View className="items-center mb-10">
@@ -77,6 +85,8 @@ export default function LoginScreen({ navigation }: any) {
                                 placeholderTextColor="#9ca3af"
                                 keyboardType="email-address"
                                 autoCapitalize="none"
+                                value={email}
+                                onChangeText={setEmail}
                                 style={{ fontFamily: 'Tajawal-Medium', textAlign: 'right' }}
                             />
                         </View>
@@ -95,6 +105,8 @@ export default function LoginScreen({ navigation }: any) {
                                     placeholder="أدخل كلمة المرور"
                                     placeholderTextColor="#9ca3af"
                                     secureTextEntry={!isPasswordVisible}
+                                    value={password}
+                                    onChangeText={setPassword}
                                     style={{ fontFamily: 'Tajawal-Medium', textAlign: 'right' }}
                                 />
                             </View>
