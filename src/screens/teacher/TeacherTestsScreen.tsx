@@ -106,13 +106,12 @@ const TestSessionCard = ({ test, isArchive, navigation }: { test: any, isArchive
                 {/* Action Button */}
                 <TouchableOpacity
                     activeOpacity={0.8}
-                    onPress={() => !isArchive && navigation.navigate('ManageTestSession', { test })}
-                    className={`h-11 px-4 rounded-xl flex-row-reverse items-center justify-center shadow-sm ${isArchive ? 'bg-white border border-gray-200' : 'bg-primary'
-                        }`}
+                    // التعديل هنا: التوجيه الديناميكي بناءً على حالة الاختبار
+                    onPress={() => navigation.navigate(isArchive ? 'TestGradesRecord' : 'ManageTestSession', { test })}
+                    className={`h-11 px-4 rounded-xl flex-row-reverse items-center justify-center shadow-sm ${isArchive ? 'bg-white border border-gray-200' : 'bg-primary'}`}
                 >
                     <Text
                         numberOfLines={1}
-                        adjustsFontSizeToFit
                         className={`text-sm ${isArchive ? 'text-slate-700' : 'text-white'}`}
                         style={{ fontFamily: 'Tajawal-Bold', includeFontPadding: false, marginTop: 4 }}
                     >

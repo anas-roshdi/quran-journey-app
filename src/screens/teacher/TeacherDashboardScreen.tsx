@@ -14,6 +14,7 @@ interface Student {
     theme: { bg: string, text: string };
     lesson: { text: string, isCompleted: boolean };
     review: { type: 'range' | 'multiple' | 'text', data: any, isCompleted: boolean };
+    hasPlan: boolean; // إضافة خاصية التأكد من وجود خطة للطالب
 }
 
 // --- Initial Mock Data ---
@@ -24,17 +25,21 @@ const initialData: Record<string, { stats: any, students: Student[] }> = {
             {
                 id: '1', name: 'عمر خالد', initial: 'ع', theme: { bg: 'bg-emerald-100', text: 'text-primary' },
                 lesson: { text: 'سورة البقرة (الآيات 1 - 15)', isCompleted: true },
-                review: { type: 'range', data: { start: 'سورة الناس', end: 'سورة الملك' }, isCompleted: false }
+                review: { type: 'range', data: { start: 'سورة الناس', end: 'سورة الملك' }, isCompleted: false },
+                hasPlan: true
             },
             {
+                // طالب ليس لديه خطة (للتجربة)
                 id: '2', name: 'محمد علي', initial: 'م', theme: { bg: 'bg-blue-100', text: 'text-blue-700' },
                 lesson: { text: 'سورة النبأ (كاملة)', isCompleted: false },
-                review: { type: 'multiple', data: ['سورة يس', 'سورة الصافات', 'سورة ص'], isCompleted: false }
+                review: { type: 'multiple', data: ['سورة يس', 'سورة الصافات', 'سورة ص'], isCompleted: false },
+                hasPlan: false
             },
             {
                 id: '5', name: 'زياد طارق', initial: 'ز', theme: { bg: 'bg-teal-100', text: 'text-teal-700' },
                 lesson: { text: 'سورة المائدة (1 - 20)', isCompleted: true },
-                review: { type: 'text', data: 'الجزء الثامن والعشرون', isCompleted: true }
+                review: { type: 'text', data: 'الجزء الثامن والعشرون', isCompleted: true },
+                hasPlan: true
             },
         ]
     },
@@ -44,12 +49,15 @@ const initialData: Record<string, { stats: any, students: Student[] }> = {
             {
                 id: '3', name: 'أحمد محمود', initial: 'أ', theme: { bg: 'bg-purple-100', text: 'text-purple-700' },
                 lesson: { text: 'سورة آل عمران (الآيات 1 - 20)', isCompleted: true },
-                review: { type: 'text', data: 'الجزء التاسع والعشرون (كامل)', isCompleted: true }
+                review: { type: 'text', data: 'الجزء التاسع والعشرون (كامل)', isCompleted: true },
+                hasPlan: true
             },
             {
+                // طالب ليس لديه خطة (للتجربة)
                 id: '4', name: 'سالم عبدالله', initial: 'س', theme: { bg: 'bg-orange-100', text: 'text-orange-700' },
                 lesson: { text: 'سورة الكهف (الآيات 10 - 30)', isCompleted: false },
-                review: { type: 'range', data: { start: 'سورة النبأ', end: 'سورة التكوير' }, isCompleted: true }
+                review: { type: 'range', data: { start: 'سورة النبأ', end: 'سورة التكوير' }, isCompleted: true },
+                hasPlan: false
             }
         ]
     }
@@ -67,7 +75,6 @@ export default function TeacherDashboardScreen({ navigation }: any) {
     const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
 
     // --- Single Source of Truth for Filters ---
-    // Start with all filters active (showing all students)
     const [activeFilters, setActiveFilters] = useState<FilterStatus[]>(ALL_FILTERS);
 
     // --- Handlers ---
@@ -90,7 +97,7 @@ export default function TeacherDashboardScreen({ navigation }: any) {
         });
     };
 
-    // --- Filter Modal Toggle Logic (Checkbox Behavior) ---
+    // --- Filter Modal Toggle Logic ---
     const toggleFilterCheckbox = (filterId: FilterStatus) => {
         setActiveFilters(prev => {
             if (prev.includes(filterId)) {
@@ -101,7 +108,7 @@ export default function TeacherDashboardScreen({ navigation }: any) {
         });
     };
 
-    // --- Top Cards Click Handlers (Two-way Binding) ---
+    // --- Top Cards Click Handlers ---
     const handleAllClick = () => setActiveFilters(ALL_FILTERS);
     const handleCompletedClick = () => setActiveFilters(['completed_both']);
     const handlePendingClick = () => setActiveFilters(['missing_lesson', 'missing_review', 'missing_both']);
@@ -150,7 +157,7 @@ export default function TeacherDashboardScreen({ navigation }: any) {
             <ScrollView contentContainerStyle={{ paddingBottom: 120 }} showsVerticalScrollIndicator={false}>
                 <View className="px-5 py-6">
 
-                    {/* --- Quick Stats Grid (Now fully synced with checkboxes) --- */}
+                    {/* --- Quick Stats Grid --- */}
                     <View className="flex-row-reverse justify-between mb-6 gap-2">
                         <TouchableOpacity
                             onPress={handleAllClick}
@@ -249,8 +256,18 @@ export default function TeacherDashboardScreen({ navigation }: any) {
                                                 </View>
                                                 <Text className="text-base text-foreground" style={{ fontFamily: 'Tajawal-Bold' }}>{student.name}</Text>
                                             </View>
-                                            <TouchableOpacity className="bg-background px-3 py-1.5 rounded-full border border-border">
-                                                <Text className="text-xs text-gray-600" style={{ fontFamily: 'Tajawal-Medium' }}>خطة الطالب</Text>
+
+                                            {/* الزر المعدل: يتغير لونه ويظهر تنبيه إذا لم يكن الطالب يمتلك خطة */}
+                                            <TouchableOpacity
+                                                onPress={() => navigation.navigate('TeacherStudentPlan', { student })}
+                                                className={`flex-row-reverse items-center px-3 py-1.5 rounded-full border ${!student.hasPlan ? 'bg-orange-50 border-orange-200' : 'bg-background border-border'}`}
+                                            >
+                                                {!student.hasPlan && (
+                                                    <Feather name="alert-circle" size={14} color="#f97316" style={{ marginLeft: 6 }} />
+                                                )}
+                                                <Text className={`text-xs ${!student.hasPlan ? 'text-orange-600' : 'text-gray-600'}`} style={{ fontFamily: 'Tajawal-Medium', includeFontPadding: false, marginTop: 2 }}>
+                                                    خطة الطالب
+                                                </Text>
                                             </TouchableOpacity>
                                         </View>
 
@@ -385,7 +402,6 @@ export default function TeacherDashboardScreen({ navigation }: any) {
                                                 {opt.label}
                                             </Text>
 
-                                            {/* Square Checkbox UI */}
                                             <View className={`w-5 h-5 rounded-md border-2 items-center justify-center transition-colors ${isSelected ? 'bg-primary border-primary' : 'bg-white border-gray-300'}`}>
                                                 {isSelected && <Feather name="check" size={14} color="white" />}
                                             </View>
