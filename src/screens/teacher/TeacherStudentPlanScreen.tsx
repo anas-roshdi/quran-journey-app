@@ -201,7 +201,7 @@ export default function TeacherStudentPlanScreen({ route, navigation }: any) {
                                     <View className="w-8 h-8 bg-primary-light rounded-full items-center justify-center ml-2 border border-primary">
                                         <Feather name="edit-3" size={14} color="#10b981" />
                                     </View>
-                                    <Text className="text-lg text-primary" style={{ fontFamily: 'Tajawal-Bold' }}>تقييم المعلم للسبر</Text>
+                                    <Text className="text-lg text-primary" style={{ fontFamily: 'Tajawal-Bold' }}>تقييم المعلم</Text>
                                 </View>
 
                                 {/* Actual Verified Amount */}
