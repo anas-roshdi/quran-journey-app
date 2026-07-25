@@ -182,7 +182,9 @@ export default function TeacherClassesScreen({ navigation }: any) {
                                         <Text className="text-white text-sm" style={{ fontFamily: 'Tajawal-Bold', includeFontPadding: false, marginTop: 2 }}>إدارة الطلاب</Text>
                                     </TouchableOpacity>
 
-                                    <TouchableOpacity className="flex-1 bg-background border border-border h-11 rounded-xl items-center justify-center active:bg-background shadow-sm">
+                                    <TouchableOpacity className="flex-1 bg-background border border-border h-11 rounded-xl items-center justify-center active:bg-background shadow-sm"
+                                        onPress={() => navigation.navigate('TeacherAttendance')}
+                                    >
                                         <Text className="text-slate-600 text-sm" style={{ fontFamily: 'Tajawal-Medium', includeFontPadding: false, marginTop: 2 }}>سجل الحضور</Text>
                                     </TouchableOpacity>
                                 </View>

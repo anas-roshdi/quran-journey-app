@@ -130,6 +130,7 @@ export default function ManageStudentsScreen({ route, navigation }: any) {
                                     <TouchableOpacity
                                         activeOpacity={0.8}
                                         className="flex-1 bg-gray-50 border border-gray-200 h-11 rounded-xl flex-row-reverse items-center justify-center gap-2"
+                                        onPress={() => navigation.navigate('StudentEvaluationRecord', { student })}
                                     >
                                         <Feather name="calendar" size={16} color="#64748b" />
                                         <Text className="text-slate-600 text-sm" style={{ fontFamily: 'Tajawal-Bold', includeFontPadding: false, marginTop: 2 }}>سجل التقييم</Text>

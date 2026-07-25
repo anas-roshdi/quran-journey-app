@@ -41,7 +41,8 @@ import TestGradesRecordScreen from './src/screens/teacher/TestGradesRecordScreen
 import TeacherStudentPlan from './src/screens/teacher/TeacherStudentPlanScreen';
 import CreateClassScreen from './src/screens/teacher/CreateClassScreen';
 import ManageStudentsScreen from './src/screens/teacher/ManageStudentsScreen';
-
+import StudentEvaluationRecordScreen from './src/screens/teacher/StudentEvaluationRecordScreen';
+import TeacherAttendanceScreen from './src/screens/teacher/TeacherAttendanceScreen';
 
 
 
@@ -98,8 +99,8 @@ export default function App() {
         <Stack.Screen name="TeacherStudentPlan" component={TeacherStudentPlan} />
         <Stack.Screen name="CreateClass" component={CreateClassScreen} />
         <Stack.Screen name="ManageStudents" component={ManageStudentsScreen} />
-
-
+        <Stack.Screen name="StudentEvaluationRecord" component={StudentEvaluationRecordScreen} />
+        <Stack.Screen name="TeacherAttendance" component={TeacherAttendanceScreen} />
 
 
 
