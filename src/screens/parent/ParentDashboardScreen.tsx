@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Platform, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import BottomNav from '../../components/BottomNav';
 import DashboardHeader from '../../components/DashboardHeader'; // المكون المشترك
@@ -64,10 +65,7 @@ export default function ParentDashboardScreen({ navigation }: any) {
     const selectedChild = childrenData.find((c) => c.id === selectedChildId)!;
 
     return (
-        <View
-            className="flex-1 bg-background"
-            style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 40 }}
-        >
+        <SafeAreaView className="flex-1 bg-background" edges={['top']}>
             {/* --- Header Section (Reusable Component) --- */}
             <View className="bg-card px-5 py-4 shadow-sm border-b border-border z-10">
                 <DashboardHeader
@@ -182,10 +180,11 @@ export default function ParentDashboardScreen({ navigation }: any) {
                         </View>
 
                         <TouchableOpacity
-                            className="w-full bg-primary-light border border-primary rounded-xl items-center justify-center"
+                            onPress={() => navigation.navigate('MemorizationPlan', { student: selectedChild, role: 'parent' })}
+                            className="w-full bg-primary-light border border-primary rounded-xl items-center justify-center active:bg-primary-light/70"
                             style={{ height: 42 }}
                         >
-                            <Text className="text-primary text-sm" style={{ fontFamily: 'Tajawal-Bold' }}>عرض التفاصيل</Text>
+                            <Text className="text-primary text-sm" style={{ fontFamily: 'Tajawal-Bold', includeFontPadding: false, marginTop: 2 }}>عرض التفاصيل</Text>
                         </TouchableOpacity>
                     </View>
 
@@ -212,6 +211,6 @@ export default function ParentDashboardScreen({ navigation }: any) {
 
             <BottomNav role="parent" activeTab="home" navigation={navigation} />
 
-        </View>
+        </SafeAreaView>
     );
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Platform, StatusBar, Modal, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Modal, TouchableWithoutFeedback } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import BottomNav from '../../components/BottomNav';
 
@@ -83,10 +84,7 @@ export default function LeaderboardScreen({ route, navigation }: any) {
     const displayOrder = [activeData.topThree[1], activeData.topThree[0], activeData.topThree[2]].filter(Boolean);
 
     return (
-        <View
-            className="flex-1 bg-background"
-            style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 40 }}
-        >
+        <SafeAreaView className="flex-1 bg-background" edges={['top']}>
             {/* --- Header --- */}
             <View className="bg-card px-5 py-4 flex-row items-center justify-center shadow-sm z-10">
                 <Text className="text-lg text-foreground" style={{ fontFamily: 'Tajawal-Bold' }}>الترتيب</Text>
@@ -273,6 +271,6 @@ export default function LeaderboardScreen({ route, navigation }: any) {
 
             <BottomNav role={userRole} activeTab="leaderboard" navigation={navigation} />
 
-        </View>
+        </SafeAreaView>
     );
 }

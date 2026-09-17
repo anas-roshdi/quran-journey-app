@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity, Platform, StatusBar } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from "@expo/vector-icons";
 import BottomNav from '../../components/BottomNav';
 
@@ -144,10 +145,7 @@ export default function TeacherTestsScreen({ navigation }: any) {
     const [activeTab, setActiveTab] = useState<'scheduled' | 'archive'>('scheduled');
 
     return (
-        <View
-            className="flex-1 bg-background"
-            style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 40 }}
-        >
+        <SafeAreaView className="flex-1 bg-background" edges={['top']}>
             {/* --- Header --- */}
             <View className="h-16 bg-card border-b border-border justify-center items-center z-10 relative w-full">
                 <Text className="text-lg text-foreground" style={{ fontFamily: 'Tajawal-Bold' }}>
@@ -214,6 +212,6 @@ export default function TeacherTestsScreen({ navigation }: any) {
             </ScrollView>
 
             <BottomNav role="teacher" activeTab="tests" navigation={navigation} />
-        </View>
+        </SafeAreaView>
     );
 }

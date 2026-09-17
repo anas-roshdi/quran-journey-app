@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Platform, StatusBar, TextInput, Modal, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, TextInput, Modal, TouchableWithoutFeedback } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import BottomNav from '../../components/BottomNav';
 import DashboardHeader from '../../components/DashboardHeader';
@@ -142,7 +143,7 @@ export default function TeacherDashboardScreen({ navigation }: any) {
     }, [currentClass.students, searchQuery, activeFilters]);
 
     return (
-        <View className="flex-1 bg-background" style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 40 }}>
+        <SafeAreaView className="flex-1 bg-background" edges={['top']}>
 
             <View className="bg-card px-5 py-4 shadow-sm border-b border-border z-10">
                 <DashboardHeader
@@ -423,6 +424,6 @@ export default function TeacherDashboardScreen({ navigation }: any) {
                 </TouchableOpacity>
             </Modal>
 
-        </View>
+        </SafeAreaView>
     );
 }

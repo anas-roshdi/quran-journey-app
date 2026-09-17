@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Platform, StatusBar, Modal, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Modal, TouchableWithoutFeedback, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import BottomNav from '../../components/BottomNav';
 
@@ -52,6 +53,11 @@ export default function MyChildrenScreen({ navigation }: any) {
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [activeChildForDropdown, setActiveChildForDropdown] = useState<ChildData | null>(null);
 
+    // --- Add Child Modal State ---
+    const [isAddChildModalVisible, setIsAddChildModalVisible] = useState(false);
+    const [childCode, setChildCode] = useState('');
+    const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
+
     // --- Handlers ---
     const openClassDropdown = (child: ChildData) => {
         if (child.classes.length > 1) {
@@ -66,10 +72,7 @@ export default function MyChildrenScreen({ navigation }: any) {
     };
 
     return (
-        <View
-            className="flex-1 bg-background"
-            style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 40 }}
-        >
+        <SafeAreaView className="flex-1 bg-background" edges={['top']}>
             {/* --- Sticky Header --- */}
             <View className="bg-card px-5 py-4 flex-row items-center justify-center border-b border-border shadow-sm z-10">
                 <Text className="text-lg text-foreground" style={{ fontFamily: 'Tajawal-Bold' }}>متابعة الأبناء</Text>
@@ -79,6 +82,7 @@ export default function MyChildrenScreen({ navigation }: any) {
 
                 {/* --- Premium Add Child Button --- */}
                 <TouchableOpacity
+                    onPress={() => setIsAddChildModalVisible(true)}
                     className="w-full bg-card border border-primary rounded-2xl p-4 flex-row-reverse items-center justify-between mb-5 shadow-sm active:bg-primary-light/30"
                 >
                     <View className="flex-row-reverse items-center gap-3">
@@ -154,13 +158,6 @@ export default function MyChildrenScreen({ navigation }: any) {
                                     </View>
                                 </View>
 
-                                {/* Divider */}
-                                <View className="border-t border-border mb-4" />
-
-                                {/* Action Button */}
-                                <TouchableOpacity className="w-full bg-primary h-11 rounded-xl items-center justify-center active:opacity-90 shadow-sm shadow-emerald-200">
-                                    <Text className="text-white text-sm" style={{ fontFamily: 'Tajawal-Bold' }}>عرض التفاصيل</Text>
-                                </TouchableOpacity>
 
                             </View>
                         );
@@ -208,9 +205,89 @@ export default function MyChildrenScreen({ navigation }: any) {
                 </TouchableWithoutFeedback>
             </Modal>
 
+            {/* --- Add Child Modal (Link by Code or Register) --- */}
+            <Modal animationType="fade" onRequestClose={() => setIsAddChildModalVisible(false)} transparent={true} visible={isAddChildModalVisible}>
+                <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
+                    <TouchableOpacity activeOpacity={1} className="flex-1 justify-center items-center px-5 bg-black/50" onPress={() => setIsAddChildModalVisible(false)}>
+                        <TouchableWithoutFeedback>
+                            <View className="bg-card w-full rounded-3xl p-6 shadow-2xl items-center">
+
+                                <View className="w-16 h-16 bg-blue-50 rounded-full items-center justify-center mb-4 border border-blue-100">
+                                    <Feather color="#3b82f6" name="link" size={28} />
+                                </View>
+
+                                <Text className="text-xl text-foreground mb-2" style={{ fontFamily: 'Tajawal-Bold' }}>
+                                    ربط حساب الابن
+                                </Text>
+
+                                <Text className="text-sm text-slate-500 text-center mb-6 leading-relaxed" style={{ fontFamily: 'Tajawal-Medium' }}>
+                                    أدخل الرمز الخاص بابنك لربط حسابه ومتابعة حفظه. إذا لم يكن لديه حساب، يمكنك إنشاء حساب جديد له بالأسفل.
+                                </Text>
+
+                                {/* Code Input */}
+                                <TextInput autoCapitalize="characters" className="w-full h-14 bg-gray-50 border border-gray-200 rounded-xl px-4 text-center text-lg text-primary tracking-widest mb-6" style={{ fontFamily: 'Tajawal-Bold' }} onChangeText={setChildCode} placeholder="أدخل الرمز هنا (مثال: A7X9P)" placeholderTextColor="#94a3b8" value={childCode} />
+
+                                {/* Link Action Button */}
+                                <TouchableOpacity activeOpacity={0.8} className="w-full bg-primary h-12 rounded-xl flex-row-reverse items-center justify-center shadow-sm mb-5" onPress={() => {
+                                    // TODO: Implement linking logic API call here
+                                    console.log("Linking child with code:", childCode);
+                                    setIsAddChildModalVisible(false);
+                                    setTimeout(() => setIsSuccessModalVisible(true), 300);
+                                }}
+                                >
+                                    <Text className="text-white text-base" style={{ fontFamily: 'Tajawal-Bold', includeFontPadding: false, marginTop: 2 }}>
+                                        تأكيد وربط الحساب
+                                    </Text>
+                                </TouchableOpacity>
+
+                                {/* Register New Account Option */}
+                                <View className="flex-row-reverse items-center justify-center gap-1.5">
+                                    <Text className="text-sm text-slate-500" style={{ fontFamily: 'Tajawal-Medium' }}>
+                                        ليس لديه حساب؟
+                                    </Text>
+                                    <TouchableOpacity onPress={() => {
+                                        setIsAddChildModalVisible(false);
+                                        navigation.navigate('Register');
+                                    }}
+                                        activeOpacity={0.7}
+                                    >
+                                        <Text className="text-sm text-primary underline" style={{ fontFamily: 'Tajawal-Bold' }}>
+                                            سجل حساب جديد
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </TouchableOpacity>
+                </KeyboardAvoidingView>
+            </Modal>
+
+            {/* --- Success Confirmation Modal --- */}
+            <Modal animationType="fade" onRequestClose={() => setIsSuccessModalVisible(false)} transparent={true} visible={isSuccessModalVisible}>
+                <View className="flex-1 justify-center items-center px-6 bg-black/50">
+                    <View className="bg-card w-full rounded-3xl p-6 items-center shadow-2xl">
+                        <View className="w-20 h-20 bg-emerald-50 border border-emerald-100 rounded-full items-center justify-center mb-5">
+                            <Feather color="#10b981" name="check" size={40} />
+                        </View>
+                        <Text className="text-xl text-foreground mb-2 text-center" style={{ fontFamily: 'Tajawal-Bold' }}>
+                            تم ربط الحساب بنجاح
+                        </Text>
+                        <Text className="text-sm text-slate-500 mb-8 text-center leading-relaxed" style={{ fontFamily: 'Tajawal-Medium' }}>
+                            تم ربط حساب الابن بنجاح. يمكنك الآن متابعة تقدمه وإنجازاته في الحلقات من خلال قائمة أبنائك.
+                        </Text>
+                        <TouchableOpacity activeOpacity={0.8} className="w-full h-12 bg-primary rounded-xl items-center justify-center shadow-sm" onPress={() => setIsSuccessModalVisible(false)}>
+                            <Text className="text-white text-base text-center w-full" style={{ fontFamily: 'Tajawal-Bold', includeFontPadding: false, marginTop: 2 }}>
+                                متابعة
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+
             {/* --- Reusable Dynamic Bottom Navigation --- */}
             <BottomNav role="parent" activeTab="children" navigation={navigation} />
 
-        </View>
+        </SafeAreaView>
     );
 }

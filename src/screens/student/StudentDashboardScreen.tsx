@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Platform, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import BottomNav from '../../components/BottomNav';
 import DashboardHeader from '../../components/DashboardHeader'; // استيراد الشريط الموحد
@@ -33,10 +34,7 @@ export default function DashboardScreen({ navigation }: any) {
     const reviewSurahs = ['سورة يس', 'سورة الصافات', 'سورة ص', 'سورة الزمر'];
 
     return (
-        <View
-            className="flex-1 bg-background"
-            style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 40 }}
-        >
+        <SafeAreaView className="flex-1 bg-background" edges={['top']}>
             {/* --- Header Section (Reusable Component) --- */}
             {/* وضعنا المكون داخل حاوية للحفاظ على شكل الشريط العلوي المتميز بخلفيته البيضاء والظل */}
             <View className="bg-card px-5 py-4 shadow-sm border-b border-border z-10">
@@ -220,6 +218,6 @@ export default function DashboardScreen({ navigation }: any) {
             {/* --- Bottom Navigation Bar --- */}
             <BottomNav role="student" activeTab="home" navigation={navigation} />
 
-        </View>
+        </SafeAreaView>
     );
 }

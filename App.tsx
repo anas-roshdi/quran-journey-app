@@ -2,6 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useFonts, Tajawal_400Regular, Tajawal_500Medium, Tajawal_700Bold } from '@expo-google-fonts/tajawal';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // Auth Screens
 import LoginScreen from './src/screens/auth/LoginScreen';
@@ -18,6 +19,8 @@ import LearnTajweedScreen from './src/screens/shared/LearnTajweedScreen';
 import NotificationsScreen from './src/screens/shared/NotificationsScreen';
 import EditProfileScreen from './src/screens/shared/EditProfileScreen';
 import ChangePasswordScreen from './src/screens/shared/ChangePasswordScreen';
+import FaqScreen from './src/screens/shared/FaqScreen';
+import ContactUsScreen from './src/screens/shared/ContactUsScreen';
 
 // Student Screens
 import DashboardScreen from './src/screens/student/StudentDashboardScreen';
@@ -40,6 +43,7 @@ import TestSettingsScreen from './src/screens/teacher/TestSettingsScreen';
 import TestGradesRecordScreen from './src/screens/teacher/TestGradesRecordScreen';
 import TeacherStudentPlan from './src/screens/teacher/TeacherStudentPlanScreen';
 import CreateClassScreen from './src/screens/teacher/CreateClassScreen';
+import EditClassScreen from './src/screens/teacher/EditClassScreen';
 import ManageStudentsScreen from './src/screens/teacher/ManageStudentsScreen';
 import StudentEvaluationRecordScreen from './src/screens/teacher/StudentEvaluationRecordScreen';
 import TeacherAttendanceScreen from './src/screens/teacher/TeacherAttendanceScreen';
@@ -63,9 +67,10 @@ export default function App() {
   if (!fontsLoaded) return null;
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Login" component={LoginScreen} />
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="OtpVerificationModal" component={OtpVerificationModal} />
@@ -89,6 +94,8 @@ export default function App() {
         <Stack.Screen name="JoinClass" component={JoinClassScreen} />
         <Stack.Screen name="EditProfile" component={EditProfileScreen} />
         <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
+        <Stack.Screen name="Faq" component={FaqScreen} />
+        <Stack.Screen name="ContactUs" component={ContactUsScreen} />
         <Stack.Screen name="Achievements" component={AchievementsScreen} />
         <Stack.Screen name="BookTest" component={BookTestScreen} />
         <Stack.Screen name="TeacherTests" component={TeacherTestsScreen} />
@@ -98,6 +105,7 @@ export default function App() {
         <Stack.Screen name="TestGradesRecord" component={TestGradesRecordScreen} />
         <Stack.Screen name="TeacherStudentPlan" component={TeacherStudentPlan} />
         <Stack.Screen name="CreateClass" component={CreateClassScreen} />
+        <Stack.Screen name="EditClass" component={EditClassScreen} />
         <Stack.Screen name="ManageStudents" component={ManageStudentsScreen} />
         <Stack.Screen name="StudentEvaluationRecord" component={StudentEvaluationRecordScreen} />
         <Stack.Screen name="TeacherAttendance" component={TeacherAttendanceScreen} />
@@ -106,5 +114,6 @@ export default function App() {
 
       </Stack.Navigator>
     </NavigationContainer>
+    </SafeAreaProvider>
   );
 }

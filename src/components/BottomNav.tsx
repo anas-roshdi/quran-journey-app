@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Platform } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 
 interface BottomNavProps {
@@ -9,6 +10,7 @@ interface BottomNavProps {
 }
 
 export default function BottomNav({ role, activeTab, navigation }: BottomNavProps) {
+    const insets = useSafeAreaInsets();
 
     // Color and font configuration helpers to keep layouts visually stable
     const getIconColor = (tabName: string) => activeTab === tabName ? '#10b981' : '#9ca3af';
@@ -16,7 +18,10 @@ export default function BottomNav({ role, activeTab, navigation }: BottomNavProp
     const getFontFamily = (tabName: string) => activeTab === tabName ? 'Tajawal-Bold' : 'Tajawal-Medium';
 
     return (
-        <View className={`absolute bottom-0 left-0 right-0 bg-background border-t border-border flex-row justify-around items-center px-1 py-2 ${Platform.OS === 'ios' ? 'pb-8' : 'pb-3'}`}>
+        <View 
+            className="absolute bottom-0 left-0 right-0 bg-background border-t border-border flex-row justify-around items-center px-1 py-2"
+            style={{ paddingBottom: insets.bottom > 0 ? insets.bottom + 10 : 20 }}
+        >
 
             {/* 1. Profile */}
             <TouchableOpacity onPress={() => navigation.navigate('Profile', { role })} className="items-center justify-center flex-1">

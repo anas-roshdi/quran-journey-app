@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Platform, StatusBar, Modal, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Modal, TouchableWithoutFeedback } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import BottomNav from '../../components/BottomNav';
 
@@ -132,10 +133,7 @@ export default function ParentReportsScreen({ navigation }: any) {
     };
 
     return (
-        <View
-            className="flex-1 bg-background"
-            style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 40 }}
-        >
+        <SafeAreaView className="flex-1 bg-background" edges={['top']}>
             {/* --- Sticky Header --- */}
             <View className="bg-card px-5 py-4 flex-row items-center justify-center shadow-sm z-10">
                 <Text className="text-lg text-foreground" style={{ fontFamily: 'Tajawal-Bold' }}>التقارير</Text>
@@ -298,6 +296,6 @@ export default function ParentReportsScreen({ navigation }: any) {
 
             <BottomNav role="parent" activeTab="reports" navigation={navigation} />
 
-        </View>
+        </SafeAreaView>
     );
 }

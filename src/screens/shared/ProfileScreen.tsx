@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Platform, StatusBar, Switch, Modal, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Switch, Modal, TouchableWithoutFeedback } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import BottomNav from '../../components/BottomNav';
 
@@ -45,10 +46,7 @@ export default function ProfileScreen({ route, navigation }: any) {
     );
 
     return (
-        <View
-            className="flex-1 bg-background"
-            style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 40 }}
-        >
+        <SafeAreaView className="flex-1 bg-background" edges={['top']}>
             <View className="bg-card px-5 py-4 flex-row items-center justify-center border-b border-border shadow-sm z-10">
                 <Text className="text-lg text-foreground" style={{ fontFamily: 'Tajawal-Bold' }}>حسابي</Text>
             </View>
@@ -94,18 +92,18 @@ export default function ProfileScreen({ route, navigation }: any) {
                         <>
                             <SectionHeader title="إدارة المعلم" />
                             <SettingsItem onPress={() => navigation.navigate('TeacherClasses')} icon="settings" label="إدارة الحلقات" />
-                            <SettingsItem icon="archive" label="أرشيف التقارير" isLast={true} />
+                            {/* <SettingsItem icon="archive" label="أرشيف التقارير" isLast={true} />*/}
                         </>
                     )}
 
-                    {/* 3. Parent Specific Settings */}
+                    {/* 3. Parent Specific Settings 
                     {userRole === 'parent' && (
                         <>
                             <SectionHeader title="إدارة ولي الأمر" />
                             <SettingsItem icon="users" label="إدارة الأبناء المضافين" />
                             <SettingsItem icon="mail" label="تفضيلات استلام التقارير" isLast={true} />
                         </>
-                    )}
+                    )}*/}
 
                     {/* --- Common Settings --- */}
                     <SectionHeader title="التفضيلات" />
@@ -123,8 +121,8 @@ export default function ProfileScreen({ route, navigation }: any) {
                     </View>
 
                     <SectionHeader title="الدعم الفني" />
-                    <SettingsItem icon="help-circle" label="الأسئلة الشائعة" />
-                    <SettingsItem icon="message-square" label="تواصل معنا" isLast={true} />
+                    <SettingsItem onPress={() => navigation.navigate('Faq')} icon="help-circle" label="الأسئلة الشائعة" />
+                    <SettingsItem onPress={() => navigation.navigate('ContactUs')} icon="message-square" label="تواصل معنا" isLast={true} />
                 </View>
 
                 {/* --- Logout Button --- */}
@@ -203,6 +201,6 @@ export default function ProfileScreen({ route, navigation }: any) {
                     </TouchableWithoutFeedback>
                 </TouchableOpacity>
             </Modal>
-        </View>
+        </SafeAreaView>
     );
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Platform, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import BottomNav from '../../components/BottomNav';
 
@@ -94,10 +95,7 @@ export default function MyClassesScreen({ route, navigation }: any) {
     };
 
     return (
-        <View
-            className="flex-1 bg-background"
-            style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 40 }}
-        >
+        <SafeAreaView className="flex-1 bg-background" edges={['top']}>
             {/* Header */}
             <View className="bg-card px-5 py-4 flex-row items-center justify-center border-b border-border shadow-sm">
                 <Text className="text-lg text-foreground" style={{ fontFamily: 'Tajawal-Bold' }}>حلقاتي</Text>
@@ -290,6 +288,6 @@ export default function MyClassesScreen({ route, navigation }: any) {
             </ScrollView>
 
             <BottomNav role={userRole} activeTab="classes" navigation={navigation} />
-        </View>
+        </SafeAreaView>
     );
 }
